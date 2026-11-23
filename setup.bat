@@ -1,50 +1,53 @@
 @echo off
-echo 🌍 Setting up AI-Powered Traffic Prediction ^& Route Planner...
+echo ========================================================
+echo   Setting up Traffic Prediction and Route Planner
+echo ========================================================
 
-REM Check if Node.js is installed
+REM Check Node.js
 node --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ Node.js is not installed. Please install Node.js 18+ first.
-    echo    Visit: https://nodejs.org/
+    echo [ERROR] Node.js is not installed. Please install Node.js 18+ first.
+    echo Visit: https://nodejs.org/
     pause
     exit /b 1
 )
 
-REM Check if Python is installed
+REM Check Python
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
-    echo ❌ Python 3 is not installed. Please install Python 3.9+ first.
-    echo    Visit: https://python.org/
+    echo [ERROR] Python 3 is not installed. Please install Python 3.9+ first.
+    echo Visit: https://python.org/
     pause
     exit /b 1
 )
 
-echo 📦 Installing frontend dependencies...
-npm install
+echo [1/3] Setting up Frontend (React / Next.js)...
+cd frontend
+call npm install
+cd ..
 
-echo 🐍 Installing backend dependencies...
+echo [2/3] Setting up Backend (Python FastAPI & ML)...
 cd backend
+if not exist .venv (
+    python -m venv .venv
+    echo Created Python virtual environment in backend/.venv
+)
+call .venv\Scripts\activate
 pip install -r requirements.txt
 cd ..
 
-echo 🔧 Setting up environment variables...
+echo [3/3] Setting up Environment Config...
 if not exist .env (
     copy env.example .env
-    echo ✅ Created .env file from template
-    echo ⚠️  Please edit .env file with your API keys
-) else (
-    echo ✅ .env file already exists
+    echo Created .env file from template
 )
 
-echo 🎉 Setup complete!
 echo.
-echo Next steps:
-echo 1. Edit .env file with your API keys
-echo 2. Start Redis server (if installed)
-echo 3. Start PostgreSQL service (if installed)
-echo 4. Run the development servers:
-echo    Terminal 1: npm run dev
-echo    Terminal 2: npm run backend
-echo.
-echo For more information, see README.md
+echo ========================================================
+echo   Setup Complete!
+echo ========================================================
+echo To start developing:
+echo   Frontend: cd frontend ^&^& npm run dev       (http://localhost:3000)
+echo   Backend:  cd backend ^&^& uvicorn main:socket_app --reload (http://localhost:8000)
+echo ========================================================
 pause

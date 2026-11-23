@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "backend": "cd backend && python -m uvicorn main:socket_app --reload --host 127.0.0.1 --port 8000"
+    "backend": "cd ../backend && python -m uvicorn main:socket_app --reload --host 127.0.0.1 --port 8000"
   },
   "dependencies": {
     "@types/leaflet": "^1.9.8",
